@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/config.service';
 import { ProductModule } from './product/product.module';
+import { SalesModule } from './sales/sales.module';
 
 
 
@@ -12,7 +13,8 @@ import { ProductModule } from './product/product.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
-    ProductModule
+    ProductModule,
+    SalesModule
     
   ],
   controllers: [AppController],
