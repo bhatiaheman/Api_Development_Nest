@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from './config/config.service';
 import { ProductModule } from './product/product.module';
 import { SalesModule } from './sales/sales.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -14,7 +16,9 @@ import { SalesModule } from './sales/sales.module';
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     ProductModule,
-    SalesModule
+    SalesModule,
+    UserModule,
+    AuthModule
     
   ],
   controllers: [AppController],
