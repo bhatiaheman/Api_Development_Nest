@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+/* eslint-disable prettier/prettier */
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+//import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
+import { LoginDTO } from './dto/login.dto';
+import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+    constructor(private userService: UserService,
+        private jwtService: JwtService,
+    ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    async login(loginDTO: LoginDTO) : Promise<{accessToken: string}> {
+        const user = await this.userService.findOne(loginDTO);
+        const passwordMatched = await bcrypt.compare(
+            loginDTO.password,
+            user.password
+        );
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+        if(passwordMatched) {
+            //delete user.password;
+            //return user;
+            const payload = {email: user.email, sub: user.id}
+            return {
+                accessToken: this.jwtService.sign(payload),
+            };
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+        } else {
+            throw new UnauthorizedException("Password Doesnt Match");
+        }
+    }
+  
 }

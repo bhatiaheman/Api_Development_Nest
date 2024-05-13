@@ -5,6 +5,7 @@ import { ExternalFactor } from "src/models/externalFactor.entity";
 import { Location } from "src/models/location.entity";
 import { Product } from "src/models/product.entity";
 import { SalesOrder } from "src/models/sales.entity";
+import { User } from "src/user/entities/user.entity";
 
 
 
@@ -40,7 +41,7 @@ class ConfigService {
           password: this.getValue('POSTGRES_PASSWORD'),
           database: this.getValue('POSTGRES_DATABASE'),
     
-          entities: [Product, SalesOrder, Customer, ExternalFactor, Location],
+          entities: [Product, SalesOrder, Customer, ExternalFactor, Location, User],
           synchronize: true,
           migrationsTableName: 'migration',
     

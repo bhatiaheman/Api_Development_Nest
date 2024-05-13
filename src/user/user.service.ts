@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -21,6 +21,15 @@ export class UserService {
     createUserDto.password = await bcrypt.hash(createUserDto.password, salt);
     const user = await this.userRepository.save(createUserDto);
     delete user.password;
+    return user;
+  }
+
+  async findOne(data: Partial<User>) :Promise<User> {
+    const user = await this.userRepository.findOneBy({email: data.email});
+    if(!user) {
+      throw new UnauthorizedException('Could not find user');
+    }
+
     return user;
   }
 
